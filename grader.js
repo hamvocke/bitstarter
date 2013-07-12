@@ -66,21 +66,22 @@ var download = function(url) {
             console.log("$s does not exist. Exiting.", url);
             process.exit(1);
         } else {
-            return data;
+            fs.writeFileSync(HTMLFILE_DEFAULT, data);
         }
-    }
+    });
 };
 
 if(require.main == module) {
     program
         .option('-c, --checks <check_file>', 'Path to checks.json', clone(assertFileExists), CHECKSFILE_DEFAULT)
         .option('-f, --file <html_file>', 'Path to index.html', clone(assertFileExists), HTMLFILE_DEFAULT)
-        .option('-u, --url <url>', 'URL to checks.json', 
+        .option('-u, --url <url>', 'URL to checks.json') 
         .parse(process.argv);
 
     var file;
     if(program.url) {
-        file = download(program.url);
+        download(program.url);
+        file = HTMLFILE_DEFAULT;
     } else  {
         file = program.file;
     }
